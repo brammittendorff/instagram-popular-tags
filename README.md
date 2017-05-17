@@ -12,8 +12,8 @@ Write every result to flie
 ./show.sh > file.txt
 ```
 
-Sort results in online sorter
+You can sort your file with the following command
 
 ```
-http://textmechanic.com/text-tools/basic-text-tools/sort-text-lines/
+sort -nr file.txt | head -n 100
 ```

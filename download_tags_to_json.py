@@ -38,7 +38,7 @@ if args.source:
                 if len(data) > 0:
                     return data
             else:
-                print "Error with reason: " + res.reason + " in url: %s" % workerurl
+                print "Error with reason: " + str(res.status) + " in url: %s" % workerurl
             return None
         except (httplib.HTTPException) as e:
             print "Something went wrong with url: %s" % e
