@@ -10,13 +10,13 @@ import Queue
 import math
 
 parser = argparse.ArgumentParser(description='Instagram Popular Tags')
-parser.add_argument('-s', '--source', metavar='file', type=argparse.FileType('r'), help='the list of words', nargs='?', required=True)
+parser.add_argument('-s', '--source', type=argparse.FileType('r'), help='the list of words', nargs='?', default=sys.stdin)
 
 args = parser.parse_args()
 
 if args.source:
 
-    concurrent = 200
+    concurrent = 10
 
     def create_worker():
         while True:
@@ -30,7 +30,12 @@ if args.source:
     def read_response(workerurl, read_parsed_url):
         try:
             conn = httplib.HTTPSConnection(read_parsed_url.netloc)
-            conn.request('GET', read_parsed_url.path)
+            headers = {
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
+                "Accept": "text/html",
+                "accept-language": "en-US"
+            }
+            conn.request('GET', read_parsed_url.path, headers=headers)
             res = conn.getresponse()
             data = res.read()
             conn.close()
@@ -39,9 +44,10 @@ if args.source:
                     return data
             else:
                 print "Error with reason: " + str(res.status) + " in url: %s" % workerurl
-            return None
+            return False
         except (httplib.HTTPException) as e:
             print "Something went wrong with url: %s" % e
+            return False
 
     def write_to_json(response_data, word):
         if response_data:
@@ -72,7 +78,6 @@ if args.source:
                 'word': word.strip()
             }
             q.put(data)
-
         q.join()
 
     except KeyboardInterrupt:
