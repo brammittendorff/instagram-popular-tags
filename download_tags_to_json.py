@@ -72,10 +72,10 @@ if args.source:
         t.start()
     try:
         for word in args.source:
-            url = 'https://www.instagram.com/explore/tags/'+ word.strip() + '/'
+            url = 'https://www.instagram.com/explore/tags/'+ word.strip().lower() + '/'
             data = {
                 'remote_url': url,
-                'word': word.strip()
+                'word': word.strip().lower()
             }
             q.put(data)
         q.join()
