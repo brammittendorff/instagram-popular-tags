@@ -16,7 +16,7 @@ args = parser.parse_args()
 
 if args.source:
 
-    concurrent = 10
+    concurrent = 1
 
     def create_worker():
         while True:
